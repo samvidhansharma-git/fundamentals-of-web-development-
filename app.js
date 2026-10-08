@@ -45,8 +45,9 @@ function updateTribute() {
   $('#tributeMessage').textContent = unlocked
     ? 'Every tag I remember is a small way of saying: I was there. I heard the why behind the code, not just the code itself. Thank you for making every class feel worth keeping.'
     : 'Complete all eight checkpoints to unlock the tribute message — every remembered detail adds one more line.';
-  $('#replayQuest').disabled = !unlocked;
-  $('#replayQuest').setAttribute('aria-label', unlocked ? 'Play the full quest again' : 'Finish the quest before replaying it');
+  $('#replayQuest').disabled = false;
+  $('#replayQuest').innerHTML = unlocked ? 'Play it again <span aria-hidden="true">↗</span>' : 'Restart the quest <span aria-hidden="true">↗</span>';
+  $('#replayQuest').setAttribute('aria-label', unlocked ? 'Play the full quest again' : 'Restart the quest from the beginning');
 }
 
 function updateHud() {
