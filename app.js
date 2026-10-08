@@ -120,7 +120,10 @@ function renderQuiz() {
   $('#quizNext').disabled = true;
   $('#quizNext').innerHTML = state.quizIndex === quizzes.length - 1 ? 'Keep the lesson <span aria-hidden="true">✦</span>' : 'Next question <span aria-hidden="true">→</span>';
   state.answered = false;
-  $('#answerGrid').innerHTML = item.answers.map((answer, index) => `<button class="answer-button" data-answer="${index}" type="button">${answer}</button>`).join('');
+  $('#answerGrid').innerHTML = item.answers.map((answer, index) => {
+    const visibleAnswer = answer.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+    return `<button class="answer-button" data-answer="${index}" type="button">${visibleAnswer}</button>`;
+  }).join('');
   $$('#answerGrid .answer-button').forEach(button => button.addEventListener('click', () => chooseAnswer(Number(button.dataset.answer))));
 }
 
