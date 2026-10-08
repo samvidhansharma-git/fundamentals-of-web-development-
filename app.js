@@ -108,6 +108,10 @@ function completeCheckpoint(index) {
     showToast(`Checkpoint ${String(index + 1).padStart(2, '0')} remembered · +${checkpoints[index].xp} XP`);
   }
   persistState(); renderLesson(index); updateHud();
+  if (index === checkpoints.length - 1 && state.completed.size === checkpoints.length) {
+    showToast('Final unlock complete · your thank-you note is ready');
+    window.setTimeout(() => scrollToTarget($('#tribute')), 180);
+  }
 }
 
 function renderQuiz() {
@@ -156,6 +160,7 @@ $('#restartTop').addEventListener('click', resetQuest);
 $('#replayQuest').addEventListener('click', resetQuest);
 $('#nextCheckpoint').addEventListener('click', () => {
   if (!state.completed.has(state.active)) { completeCheckpoint(state.active); return; }
+  if (state.active === checkpoints.length - 1) { scrollToTarget($('#tribute')); return; }
   const next = Math.min(state.active + 1, checkpoints.length - 1);
   renderLesson(next); scrollToTarget($('#lesson'));
 });
