@@ -87,6 +87,37 @@ const modules = [
   }
 ];
 
+modules[0].questions.push(
+  { q: 'Which part of an HTML document contains metadata and the page title?', answers: ['<head>', '<body>', '<footer>', '<button>'], correct: 0, good: 'Correct. head contains metadata, the title, links to stylesheets, and other document information.', try: 'The head stores document metadata; body stores the visible page content.' },
+  { q: 'Which CSS value is a hexadecimal colour?', answers: ['#27c7ee', 'font-bold', '12px', 'center'], correct: 0, good: 'Yes. A hexadecimal colour begins with # and represents red, green, and blue values.', try: 'Hex colours look like #27c7ee. 12px is a size, not a colour.' },
+  { q: 'Which element is best for a paragraph of normal text?', answers: ['<p>', '<h1>', '<img>', '<hr>'], correct: 0, good: 'Exactly. p is the semantic HTML element for a paragraph.', try: 'Use p for a paragraph; headings describe section hierarchy.' },
+  { q: 'What does font-weight change?', answers: ['The thickness of text', 'The page width', 'The background image', 'The link destination'], correct: 0, good: 'Correct. font-weight controls how light or bold the text appears.', try: 'font-weight changes text thickness; font-size changes its scale.' },
+  { q: 'Which element creates a clickable action control?', answers: ['<button>', '<meta>', '<title>', '<head>'], correct: 0, good: 'Yes. button represents an interactive control intended for an action.', try: 'button is the semantic control for an action; title names the document.' }
+);
+modules[1].questions.push(
+  { q: 'Which property sets the colour behind an element?', answers: ['background-color', 'font-style', 'text-decoration', 'justify-content'], correct: 0, good: 'Correct. background-color paints the element’s background surface.', try: 'background-color sets the surface colour; font-style affects text.' },
+  { q: 'Which box-model area sits outside the border?', answers: ['Margin', 'Content', 'Padding', 'Line-height'], correct: 0, good: 'Exactly. Margin separates an element from neighbouring elements.', try: 'Margin is outside the border; padding is inside it.' },
+  { q: 'What does 100vh relate to?', answers: ['The viewport height', 'The font weight', 'The border radius', 'The number of classes'], correct: 0, good: 'Yes. vh is a viewport-height unit, so 100vh tracks the visible viewport height.', try: 'vh means viewport height; vw means viewport width.' },
+  { q: 'What does border-radius change?', answers: ['The corner shape', 'The text alignment', 'The HTML outline', 'The link target'], correct: 0, good: 'Correct. border-radius rounds or shapes the corners of a border box.', try: 'border-radius controls corners, not text or link behaviour.' },
+  { q: 'Why is box-sizing: border-box useful?', answers: ['Width includes padding and border', 'It removes all spacing', 'It creates a Flexbox parent', 'It loads Bootstrap'], correct: 0, good: 'Exactly. border-box makes declared width include the element’s padding and border.', try: 'border-box makes dimensions easier to calculate because padding and border fit inside the declared size.' }
+);
+modules[2].questions.push(
+  { q: 'Which property distributes Flexbox items along the main axis?', answers: ['justify-content', 'font-family', 'background-size', 'border-style'], correct: 0, good: 'Yes. justify-content distributes free space along the main axis.', try: 'justify-content controls main-axis distribution; align-items controls the cross axis.' },
+  { q: 'Which list is used when the order of items matters?', answers: ['<ol>', '<ul>', '<dl>', '<menuitem>'], correct: 0, good: 'Correct. ol creates an ordered list, usually numbered.', try: 'ol is ordered; ul is unordered.' },
+  { q: 'What should an id identify?', answers: ['One unique element', 'Every paragraph', 'A colour palette', 'A video format'], correct: 0, good: 'Exactly. An id is intended to identify one unique element in a document.', try: 'Use a class for reusable styling; an id should be unique.' },
+  { q: 'What does target="_blank" usually request?', answers: ['Open the link in a new browsing context', 'Make text bold', 'Hide the link', 'Start an audio file'], correct: 0, good: 'Yes. _blank asks the browser to open the destination in a new tab or context.', try: 'target controls where a link opens; _blank commonly means a new tab.' },
+  { q: 'Why is img called a void element?', answers: ['It has no closing tag', 'It cannot show an image', 'It has no src', 'It only works in Bootstrap'], correct: 0, good: 'Correct. img is void: it carries its content through attributes and does not wrap child content.', try: 'Void elements such as img do not have closing tags.' }
+);
+modules[3].questions.push(
+  { q: 'Which attribute exposes native audio and video controls?', answers: ['controls', 'autoplay-only', 'href', 'radius'], correct: 0, good: 'Correct. controls lets the user play, pause, seek, and adjust media.', try: 'The controls attribute gives the user native playback controls.' },
+  { q: 'Which semantic element introduces a page or section?', answers: ['<header>', '<article>', '<footer>', '<hr>'], correct: 0, good: 'Yes. header introduces its page or section, often with a heading or navigation.', try: 'header introduces a page or section; footer closes one.' },
+  { q: 'Which element closes a page or section with supporting information?', answers: ['<footer>', '<nav>', '<source>', '<audio>'], correct: 0, good: 'Exactly. footer contains closing or supporting information for its nearest section.', try: 'footer is the semantic closing region.' },
+  { q: 'Why can a video include a source element?', answers: ['To provide a media file and type', 'To set the page title', 'To create a list', 'To add a CSS class'], correct: 0, good: 'Correct. source supplies a media URL and its MIME type inside audio or video.', try: 'source tells the media element which file and format to try.' },
+  { q: 'What helps a multimedia page remain understandable when sound is unavailable?', answers: ['Captions or a transcript', 'Autoplay with sound', 'A larger border', 'A hidden heading'], correct: 0, good: 'Yes. Captions and transcripts preserve meaning beyond the audio track.', try: 'Captions and transcripts support people who cannot hear or cannot play the media.' }
+);
+
+const moduleQuestionTotal = () => modules.reduce((total, module) => total + module.questions.length, 0);
+
 const STORAGE_KEY = 'classquest-save-v1';
 const freshState = () => ({ active: 0, completed: new Set(), xp: 0, quizIndex: 0, quizScore: 0, answered: false, moduleIndex: 0, moduleQuestion: 0, moduleScore: 0, moduleAnswered: false });
 function loadState() {
@@ -226,18 +257,20 @@ function escapeHTML(value) {
 }
 
 function updateCertificateState() {
-  const unlocked = state.moduleScore === modules.length * 3;
+  const total = moduleQuestionTotal();
+  const unlocked = state.moduleScore === total;
   const button = $('#certificateButton');
   button.disabled = !unlocked;
   button.innerHTML = unlocked ? 'Generate my certificate <span aria-hidden="true">✦</span>' : 'Certificate locked <span aria-hidden="true">✦</span>';
-  $('#certificateHint').textContent = unlocked ? 'Perfect score. Your certificate is ready to generate.' : `Answer all 12 module questions correctly to unlock your certificate. ${state.moduleScore} / 12 complete.`;
+  $('#certificateHint').textContent = unlocked ? 'Perfect score. Your certificate is ready to generate.' : `Answer all ${total} module questions correctly to unlock your certificate. ${state.moduleScore} / ${total} complete.`;
   $('#certificateSection').hidden = !unlocked;
   if (unlocked) $('#certificateDate').textContent = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).toUpperCase();
 }
 
 function certificateDocument() {
   const date = $('#certificateDate').textContent;
-  return `<!doctype html><html><head><meta charset="utf-8"><title>Class Quest Certificate</title><style>body{margin:0;background:#fff9ed;color:#10152b;font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.certificate{width:min(900px,calc(100% - 48px));padding:12px;background:#10152b}.border{border:2px solid #d9ff38;background:linear-gradient(135deg,#fffdf8,#fff0da 58%,#e2f9ff);padding:72px 64px;text-align:center}.overline{font-size:12px;letter-spacing:3px;color:#8b9e37}.spark{font-size:34px;color:#ff5f6d;margin:26px}.label{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#ff5f6d}h1{font:600 58px Georgia,serif;line-height:1;margin:24px 0}h1 em{color:#ff5f6d;font-style:normal}.body{max-width:620px;margin:0 auto 42px;color:#596476;font-size:17px;line-height:1.6}.meta{display:flex;justify-content:space-around;border-top:1px solid #d7cdbb;padding-top:22px;font-size:12px}.meta b,.meta small{display:block}.meta small{margin-top:6px;color:#68718a;text-transform:uppercase;letter-spacing:1px}</style></head><body><main class="certificate"><section class="border"><p class="overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="spark">✦</div><p class="label">certificate of attentive learning</p><h1>This certifies that<br><em>you were listening.</em></h1><p class="body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><div class="meta"><span><b>${date}</b><small>issued today</small></span><span><b>12 / 12</b><small>module quiz score</small></span><span><b>CLASS/QUEST</b><small>learning trail</small></span></div></section></main></body></html>`;
+  const total = moduleQuestionTotal();
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Class Quest Certificate</title><style>body{margin:0;background:#fff9ed;color:#10152b;font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.certificate{width:min(900px,calc(100% - 48px));padding:12px;background:#10152b}.border{border:2px solid #d9ff38;background:linear-gradient(135deg,#fffdf8,#fff0da 58%,#e2f9ff);padding:72px 64px;text-align:center}.overline{font-size:12px;letter-spacing:3px;color:#8b9e37}.spark{font-size:34px;color:#ff5f6d;margin:26px}.label{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#ff5f6d}h1{font:600 58px Georgia,serif;line-height:1;margin:24px 0}h1 em{color:#ff5f6d;font-style:normal}.body{max-width:620px;margin:0 auto 42px;color:#596476;font-size:17px;line-height:1.6}.meta{display:flex;justify-content:space-around;border-top:1px solid #d7cdbb;padding-top:22px;font-size:12px}.meta b,.meta small{display:block}.meta small{margin-top:6px;color:#68718a;text-transform:uppercase;letter-spacing:1px}</style></head><body><main class="certificate"><section class="border"><p class="overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="spark">✦</div><p class="label">certificate of attentive learning</p><h1>This certifies that<br><em>you were listening.</em></h1><p class="body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><div class="meta"><span><b>${date}</b><small>issued today</small></span><span><b>${total} / ${total}</b><small>module quiz score</small></span><span><b>CLASS/QUEST</b><small>learning trail</small></span></div></section></main></body></html>`;
 }
 
 function downloadCertificate() {
@@ -262,10 +295,10 @@ function renderModule(index, resetQuestion = true) {
 function renderModuleQuiz() {
   const module = modules[state.moduleIndex];
   const question = module.questions[state.moduleQuestion];
-  $('#moduleQuizLabel').textContent = `${module.number} / 03 QUESTIONS`;
-  $('#moduleQuizProgress').textContent = `${String(state.moduleQuestion + 1).padStart(2, '0')} / 03`;
+  $('#moduleQuizLabel').textContent = `${module.number} / ${String(module.questions.length).padStart(2, '0')} QUESTIONS`;
+  $('#moduleQuizProgress').textContent = `${String(state.moduleQuestion + 1).padStart(2, '0')} / ${String(module.questions.length).padStart(2, '0')}`;
   $('#moduleQuizQuestion').textContent = question.q;
-  $('#moduleQuizScore').textContent = `${state.moduleScore} / 12`;
+  $('#moduleQuizScore').textContent = `${state.moduleScore} / ${moduleQuestionTotal()}`;
   updateCertificateState();
   $('#moduleQuizFeedback').textContent = '';
   $('#moduleQuizFeedback').className = 'module-quiz-feedback';
@@ -284,12 +317,12 @@ function chooseModuleAnswer(index) {
     buttons.forEach(button => { button.disabled = true; if (Number(button.dataset.moduleAnswer) === question.correct) button.classList.add('correct'); });
     feedback.textContent = question.good; feedback.className = 'module-quiz-feedback good';
     $('#moduleQuizNext').disabled = false; showToast(`Module ${state.moduleIndex + 1} recall confirmed`);
-    if (state.moduleScore === modules.length * 3) { showToast('Perfect module score · certificate unlocked'); window.setTimeout(() => scrollToTarget($('#certificateSection')), 240); }
+    if (state.moduleScore === moduleQuestionTotal()) { showToast('Perfect module score · certificate unlocked'); window.setTimeout(() => scrollToTarget($('#certificateSection')), 240); }
   } else {
     buttons[index].classList.add('wrong'); buttons[index].disabled = true;
     feedback.textContent = `${question.try} Try another option.`; feedback.className = 'module-quiz-feedback try';
   }
-  $('#moduleQuizScore').textContent = `${state.moduleScore} / 12`; updateCertificateState(); persistState();
+  $('#moduleQuizScore').textContent = `${state.moduleScore} / ${moduleQuestionTotal()}`; updateCertificateState(); persistState();
 }
 
 function nextModuleQuestion() {
