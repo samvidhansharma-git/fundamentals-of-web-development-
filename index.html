@@ -124,7 +124,7 @@
       </section>
 
       <section class="module-quiz-section shell" id="module-quiz" aria-labelledby="module-quiz-title">
-        <div class="module-quiz-intro"><p class="eyebrow">03 / module quizzes</p><h2 id="module-quiz-title">Prove the<br /><em>details stuck.</em></h2><p>Four module-wise quiz paths. Three questions per module. Wrong answers stay kind, and every correct answer explains the why.</p><div class="module-quiz-score"><span>course quiz score</span><strong id="moduleQuizScore">0 / 12</strong></div></div>
+        <div class="module-quiz-intro"><p class="eyebrow">03 / module quizzes</p><h2 id="module-quiz-title">Prove the<br /><em>details stuck.</em></h2><p>Four module-wise quiz paths. Three questions per module. Wrong answers stay kind, and every correct answer explains the why.</p><div class="module-quiz-score"><span>course quiz score</span><strong id="moduleQuizScore">0 / 12</strong></div><div class="certificate-gate"><span class="module-label">final reward</span><p id="certificateHint">Answer all 12 module questions correctly to unlock your certificate.</p><button class="certificate-button" id="certificateButton" type="button" disabled>Certificate locked <span aria-hidden="true">✦</span></button></div></div>
         <div class="module-quiz-card">
           <div class="module-quiz-top"><span id="moduleQuizLabel">MODULE 01 / 03 QUESTIONS</span><span id="moduleQuizProgress">01 / 03</span></div>
           <h3 id="moduleQuizQuestion">Loading the module question…</h3>
@@ -132,6 +132,11 @@
           <div class="module-quiz-feedback" id="moduleQuizFeedback" role="status" aria-live="polite"></div>
           <button class="module-quiz-next" id="moduleQuizNext" type="button" disabled>Next module question <span aria-hidden="true">→</span></button>
         </div>
+      </section>
+
+      <section class="certificate-section shell" id="certificateSection" aria-labelledby="certificate-title" hidden>
+        <div class="certificate-preview" id="certificatePreview"><div class="certificate-border"><p class="certificate-overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="certificate-spark" aria-hidden="true">✦</div><p class="certificate-label">certificate of attentive learning</p><h2 id="certificate-title">This certifies that<br /><em>you were listening.</em></h2><p class="certificate-body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><div class="certificate-meta"><span><b id="certificateDate">08 OCT 2026</b><small>issued today</small></span><span><b>12 / 12</b><small>module quiz score</small></span><span><b>CLASS/QUEST</b><small>learning trail</small></span></div></div></div>
+        <div class="certificate-actions"><button class="primary-button" id="downloadCertificate" type="button">Download certificate <span aria-hidden="true">↓</span></button><button class="ghost-button" id="printCertificate" type="button">Print certificate</button></div>
       </section>
 
       <section class="quiz-section shell" id="quiz" aria-labelledby="quiz-title">

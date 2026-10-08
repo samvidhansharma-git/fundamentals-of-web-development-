@@ -225,6 +225,28 @@ function escapeHTML(value) {
   return value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
+function updateCertificateState() {
+  const unlocked = state.moduleScore === modules.length * 3;
+  const button = $('#certificateButton');
+  button.disabled = !unlocked;
+  button.innerHTML = unlocked ? 'Generate my certificate <span aria-hidden="true">✦</span>' : 'Certificate locked <span aria-hidden="true">✦</span>';
+  $('#certificateHint').textContent = unlocked ? 'Perfect score. Your certificate is ready to generate.' : `Answer all 12 module questions correctly to unlock your certificate. ${state.moduleScore} / 12 complete.`;
+  $('#certificateSection').hidden = !unlocked;
+  if (unlocked) $('#certificateDate').textContent = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).toUpperCase();
+}
+
+function certificateDocument() {
+  const date = $('#certificateDate').textContent;
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Class Quest Certificate</title><style>body{margin:0;background:#fff9ed;color:#10152b;font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.certificate{width:min(900px,calc(100% - 48px));padding:12px;background:#10152b}.border{border:2px solid #d9ff38;background:linear-gradient(135deg,#fffdf8,#fff0da 58%,#e2f9ff);padding:72px 64px;text-align:center}.overline{font-size:12px;letter-spacing:3px;color:#8b9e37}.spark{font-size:34px;color:#ff5f6d;margin:26px}.label{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#ff5f6d}h1{font:600 58px Georgia,serif;line-height:1;margin:24px 0}h1 em{color:#ff5f6d;font-style:normal}.body{max-width:620px;margin:0 auto 42px;color:#596476;font-size:17px;line-height:1.6}.meta{display:flex;justify-content:space-around;border-top:1px solid #d7cdbb;padding-top:22px;font-size:12px}.meta b,.meta small{display:block}.meta small{margin-top:6px;color:#68718a;text-transform:uppercase;letter-spacing:1px}</style></head><body><main class="certificate"><section class="border"><p class="overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="spark">✦</div><p class="label">certificate of attentive learning</p><h1>This certifies that<br><em>you were listening.</em></h1><p class="body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><div class="meta"><span><b>${date}</b><small>issued today</small></span><span><b>12 / 12</b><small>module quiz score</small></span><span><b>CLASS/QUEST</b><small>learning trail</small></span></div></section></main></body></html>`;
+}
+
+function downloadCertificate() {
+  const blob = new Blob([certificateDocument()], { type: 'text/html' });
+  const url = URL.createObjectURL(blob); const anchor = document.createElement('a');
+  anchor.href = url; anchor.download = 'class-quest-certificate.html'; anchor.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000); showToast('Certificate downloaded · keep the lesson close');
+}
+
 function renderModule(index, resetQuestion = true) {
   state.moduleIndex = index; if (resetQuestion) state.moduleQuestion = 0; state.moduleAnswered = false; persistState();
   const module = modules[index];
@@ -244,6 +266,7 @@ function renderModuleQuiz() {
   $('#moduleQuizProgress').textContent = `${String(state.moduleQuestion + 1).padStart(2, '0')} / 03`;
   $('#moduleQuizQuestion').textContent = question.q;
   $('#moduleQuizScore').textContent = `${state.moduleScore} / 12`;
+  updateCertificateState();
   $('#moduleQuizFeedback').textContent = '';
   $('#moduleQuizFeedback').className = 'module-quiz-feedback';
   $('#moduleQuizNext').disabled = true;
@@ -261,11 +284,12 @@ function chooseModuleAnswer(index) {
     buttons.forEach(button => { button.disabled = true; if (Number(button.dataset.moduleAnswer) === question.correct) button.classList.add('correct'); });
     feedback.textContent = question.good; feedback.className = 'module-quiz-feedback good';
     $('#moduleQuizNext').disabled = false; showToast(`Module ${state.moduleIndex + 1} recall confirmed`);
+    if (state.moduleScore === modules.length * 3) { showToast('Perfect module score · certificate unlocked'); window.setTimeout(() => scrollToTarget($('#certificateSection')), 240); }
   } else {
     buttons[index].classList.add('wrong'); buttons[index].disabled = true;
     feedback.textContent = `${question.try} Try another option.`; feedback.className = 'module-quiz-feedback try';
   }
-  $('#moduleQuizScore').textContent = `${state.moduleScore} / 12`; persistState();
+  $('#moduleQuizScore').textContent = `${state.moduleScore} / 12`; updateCertificateState(); persistState();
 }
 
 function nextModuleQuestion() {
@@ -301,5 +325,8 @@ document.addEventListener('click', (event) => {
   if (answer) chooseModuleAnswer(Number(answer.dataset.moduleAnswer));
 });
 $('#moduleQuizNext').addEventListener('click', nextModuleQuestion);
+$('#certificateButton').addEventListener('click', () => { updateCertificateState(); scrollToTarget($('#certificateSection')); showToast('Your certificate is ready'); });
+$('#downloadCertificate').addEventListener('click', downloadCertificate);
+$('#printCertificate').addEventListener('click', () => window.print());
 
 renderLesson(state.active); renderQuiz(); renderModule(state.moduleIndex); updateHud();

@@ -30,6 +30,8 @@ The 157-slide deck is condensed into 8 quest checkpoints: foundations, semantics
 
 The course-profile DOCX adds a separate study area for Modules I–IV. It will provide four selectable, detailed learning cards covering the exact syllabus themes: web/HTML/CSS foundations and text styling; CSS backgrounds, box model, viewport, rulesets, classes, and Bootstrap; Flexbox, Bootstrap layout/utilities, images, margins, attributes, lists, anchors, and hyperlinks; and HTML5 multimedia plus semantic elements. A separate module-wise quiz panel will contain three questions per module, immediate explanations, retry states, score/progress, and module switching. This study area is intentionally separate from the original quick quiz so the teacher can see both course learning detail and recall practice.
 
+After a perfect 12/12 module score, a certificate gate unlocks a printable on-page certificate with the issue date, score, course topics, and Class Quest identity. The certificate can also be downloaded as a self-contained HTML file for keeping or sharing.
+
 ## Project structure
 - `index.html` — accessible page shell and all regions.
 - `styles.css` — visual system and responsive behavior.
