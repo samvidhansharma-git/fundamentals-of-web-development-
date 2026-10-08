@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101826" />
+    <meta name="description" content="A playable thank-you note built from every HTML lesson." />
+    <title>Class Quest — A Tribute to Every Lesson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/2728.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to the quest</a>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="site-header" aria-label="Class Quest status">
+      <a class="brand" href="#top" aria-label="Class Quest home">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>class<span class="brand-accent">/</span>quest</span>
+      </a>
+      <div class="header-status">
+        <div class="streak" title="Your current class streak">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span><b id="streakCount">01</b> class streak</span>
+        </div>
+        <button class="text-button" id="restartTop" type="button">Restart quest <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero shell" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> a playable thank-you note</p>
+          <h1 id="hero-title">You didn’t just attend class.<br /><em>You left breadcrumbs.</em></h1>
+          <p class="hero-intro">A small quest built from every tag, lab, and “remember this” moment in your HTML journey — so your teacher can see just how much you were listening.</p>
+          <div class="hero-actions">
+            <button class="primary-button" id="beginQuest" type="button">Begin the quest <span aria-hidden="true">→</span></button>
+            <button class="ghost-button" id="skipIntro" type="button">Skip to checkpoints</button>
+          </div>
+          <div class="hero-note"><span class="note-pin" aria-hidden="true">✦</span><span><b>157 slides remembered</b><br />8 checkpoints waiting</span></div>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+          <div class="orbit-core"><span class="core-spark">✦</span><span class="core-label">HTML<br />JOURNEY</span></div>
+          <span class="orbit-node node-one">&lt;main&gt;</span><span class="orbit-node node-two">alt</span><span class="orbit-node node-three">#id</span><span class="orbit-node node-four">&lt;form&gt;</span>
+          <div class="orbit-caption">every class<br /><span>left a trace</span></div>
+        </div>
+      </section>
+
+      <section class="quest-section shell" id="quest" aria-labelledby="quest-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">01 / the map</p><h2 id="quest-title">The class quest</h2></div>
+          <div class="progress-panel" aria-label="Quest progress">
+            <div class="progress-label"><span>knowledge collected</span><strong id="progressText">0 / 8</strong></div>
+            <div class="progress-track"><span id="progressBar"></span></div>
+          </div>
+        </div>
+        <div class="quest-layout">
+          <div class="quest-intro">
+            <p class="section-lede">Eight moments from the deck. Eight chances to prove that the details stuck.</p>
+            <p class="tiny-copy">Choose any glowing checkpoint. Complete it to earn XP and reveal the next piece of the tribute.</p>
+            <div class="xp-card">
+              <span class="xp-kicker">current save file</span>
+              <div class="xp-row"><strong id="xpValue">000</strong><span>XP</span><span class="xp-level" id="levelText">listener / level 01</span></div>
+              <div class="xp-meter"><span id="xpBar"></span></div>
+            </div>
+            <div class="legend"><span><i class="legend-dot available"></i> available</span><span><i class="legend-dot done"></i> remembered</span></div>
+          </div>
+          <div class="map-card">
+            <div class="map-grid" aria-label="Interactive HTML lesson checkpoints" role="list">
+              <button class="checkpoint is-active" data-index="0" type="button" role="listitem"><span class="checkpoint-number">01</span><span class="checkpoint-icon">⌘</span><span class="checkpoint-name">Foundations</span><span class="checkpoint-status">start here</span></button>
+              <span class="map-connector connector-a" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="1" type="button" role="listitem"><span class="checkpoint-number">02</span><span class="checkpoint-icon">◇</span><span class="checkpoint-name">Semantics</span><span class="checkpoint-status">locked by wonder</span></button>
+              <span class="map-connector connector-b" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="2" type="button" role="listitem"><span class="checkpoint-number">03</span><span class="checkpoint-icon">Aa</span><span class="checkpoint-name">Text & lists</span><span class="checkpoint-status">locked by wonder</span></button>
+              <span class="map-connector connector-c" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="3" type="button" role="listitem"><span class="checkpoint-number">04</span><span class="checkpoint-icon">↗</span><span class="checkpoint-name">Links & media</span><span class="checkpoint-status">locked by wonder</span></button>
+              <span class="map-connector connector-d" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="4" type="button" role="listitem"><span class="checkpoint-number">05</span><span class="checkpoint-icon">▦</span><span class="checkpoint-name">Tables & forms</span><span class="checkpoint-status">locked by wonder</span></button>
+              <span class="map-connector connector-e" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="5" type="button" role="listitem"><span class="checkpoint-number">06</span><span class="checkpoint-icon">◌</span><span class="checkpoint-name">A11Y & SEO</span><span class="checkpoint-status">locked by wonder</span></button>
+              <span class="map-connector connector-f" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="6" type="button" role="listitem"><span class="checkpoint-number">07</span><span class="checkpoint-icon">✎</span><span class="checkpoint-name">Practice lab</span><span class="checkpoint-status">locked by wonder</span></button>
+              <span class="map-connector connector-g" aria-hidden="true"></span>
+              <button class="checkpoint" data-index="7" type="button" role="listitem"><span class="checkpoint-number">08</span><span class="checkpoint-icon">✦</span><span class="checkpoint-name">The reveal</span><span class="checkpoint-status">locked by wonder</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lesson-section shell" id="lesson" aria-labelledby="lesson-title">
+        <div class="lesson-shell">
+          <div class="lesson-aside">
+            <p class="eyebrow">active checkpoint <span id="activeIndex">01</span></p>
+            <div class="lesson-stamp" id="lessonStamp">START HERE</div>
+            <p class="lesson-aside-copy" id="asideCopy">Before the tags, there was a page waiting to be understood.</p>
+            <div class="lesson-rule" aria-hidden="true"></div>
+            <p class="lesson-micro"><span class="micro-dot"></span> no account needed<br /><span class="micro-dot"></span> progress saves in this tab</p>
+          </div>
+          <article class="lesson-card">
+            <div class="lesson-card-top"><span class="lesson-kicker" id="lessonKicker">HTML / 01</span><span class="lesson-xp" id="lessonXp">+40 XP</span></div>
+            <h2 id="lesson-title">The page has a skeleton.</h2>
+            <p class="lesson-summary" id="lessonSummary">You remembered that every page starts with a quiet promise: doctype, html, head, body. Structure first. Magic second.</p>
+            <div class="lesson-memory" id="lessonMemory"><div class="memory-label">teacher’s note / remembered</div><p>“A browser builds a DOM tree from your markup. That means order matters.”</p></div>
+            <div class="lesson-action" id="lessonAction"></div>
+            <div class="lesson-footer"><span id="lessonFootnote">Tap the small action above to mark this lesson remembered.</span><button class="next-button" id="nextCheckpoint" type="button">Next checkpoint <span aria-hidden="true">→</span></button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="quiz-section shell" id="quiz" aria-labelledby="quiz-title">
+        <div class="quiz-heading"><p class="eyebrow">02 / quick quiz</p><h2 id="quiz-title">A little proof<br /><em>you were listening.</em></h2><p>Not an exam. Just a handful of “I remember that!” moments, with explanations worth keeping.</p></div>
+        <div class="quiz-card">
+          <div class="quiz-meta"><span>question <b id="quizNumber">01</b> / 04</span><span class="quiz-score" id="quizScore">0 correct</span></div>
+          <h3 id="quizQuestion">Which tag gives the main navigation its meaning?</h3>
+          <div class="answer-grid" id="answerGrid"></div>
+          <div class="quiz-feedback" id="quizFeedback" role="status" aria-live="polite"></div>
+          <button class="quiz-next" id="quizNext" type="button" disabled>Next question <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <section class="tribute-section shell" id="tribute" aria-labelledby="tribute-title">
+        <div class="tribute-card">
+          <div class="tribute-art" aria-hidden="true"><span class="star star-a">✦</span><span class="star star-b">✧</span><span class="star star-c">✦</span><div class="tribute-orbit"></div><div class="tribute-core">&lt;/&gt;</div></div>
+          <div class="tribute-copy"><p class="eyebrow">03 / final unlock</p><h2 id="tribute-title">A final note<br /><em>is waiting.</em></h2><p id="tributeMessage">Complete all eight checkpoints to unlock the tribute message — every remembered detail adds one more line.</p><div class="tribute-signature"><span class="signature-line"></span><span>with gratitude, from your student</span></div><button class="primary-button" id="replayQuest" type="button" disabled>Play it again <span aria-hidden="true">↗</span></button></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer shell"><span>class<span class="brand-accent">/</span>quest · built from 157 remembered slides</span><span>HTML is a language. Listening is a practice.</span></footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
