@@ -28,10 +28,12 @@ A polished, responsive, game-like teacher appreciation website inspired by the s
 ## Curriculum translation
 The 157-slide deck is condensed into 8 quest checkpoints: foundations, semantics, text + lists, links + media, tables + forms, accessibility + SEO, practice labs, and final quiz/glossary. Each checkpoint has a short “remembered lesson,” one small interactive action, and one quiz question.
 
+The course-profile DOCX adds a separate study area for Modules I–IV. It will provide four selectable, detailed learning cards covering the exact syllabus themes: web/HTML/CSS foundations and text styling; CSS backgrounds, box model, viewport, rulesets, classes, and Bootstrap; Flexbox, Bootstrap layout/utilities, images, margins, attributes, lists, anchors, and hyperlinks; and HTML5 multimedia plus semantic elements. A separate module-wise quiz panel will contain three questions per module, immediate explanations, retry states, score/progress, and module switching. This study area is intentionally separate from the original quick quiz so the teacher can see both course learning detail and recall practice.
+
 ## Project structure
 - `index.html` — accessible page shell and all regions.
 - `styles.css` — visual system and responsive behavior.
-- `app.js` — quest state, interactions, and content.
+- `app.js` — quest state, interactions, original quiz, detailed Modules I–IV learning content, module quiz data, feedback, and progress.
 - `public/manus-routes.json` — route declaration.
 - `app.config.ts` — project metadata.
 - `plan.md` / `TODO.md` — approved implementation notes and outcome criteria.

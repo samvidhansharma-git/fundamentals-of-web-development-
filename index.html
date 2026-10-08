@@ -112,8 +112,30 @@
         </div>
       </section>
 
+      <section class="modules-section shell" id="modules" aria-labelledby="modules-title">
+        <div class="modules-heading"><div><p class="eyebrow">02 / study trail</p><h2 id="modules-title">Learn the modules<br /><em>in full colour.</em></h2></div><p>Built from the official Fundamentals of Web Development course profile. Pick a module to open its detailed learning notes, then prove the details in the separate quiz zone.</p></div>
+        <div class="module-tabs" role="tablist" aria-label="Modules 1 to 4">
+          <button class="module-tab is-active" type="button" role="tab" aria-selected="true" data-module="0"><span>01</span> Web + HTML</button>
+          <button class="module-tab" type="button" role="tab" aria-selected="false" data-module="1"><span>02</span> CSS styling</button>
+          <button class="module-tab" type="button" role="tab" aria-selected="false" data-module="2"><span>03</span> Flexbox + Bootstrap</button>
+          <button class="module-tab" type="button" role="tab" aria-selected="false" data-module="3"><span>04</span> Multimedia</button>
+        </div>
+        <article class="module-learning-card" id="moduleLearning" aria-live="polite"></article>
+      </section>
+
+      <section class="module-quiz-section shell" id="module-quiz" aria-labelledby="module-quiz-title">
+        <div class="module-quiz-intro"><p class="eyebrow">03 / module quizzes</p><h2 id="module-quiz-title">Prove the<br /><em>details stuck.</em></h2><p>Four module-wise quiz paths. Three questions per module. Wrong answers stay kind, and every correct answer explains the why.</p><div class="module-quiz-score"><span>course quiz score</span><strong id="moduleQuizScore">0 / 12</strong></div></div>
+        <div class="module-quiz-card">
+          <div class="module-quiz-top"><span id="moduleQuizLabel">MODULE 01 / 03 QUESTIONS</span><span id="moduleQuizProgress">01 / 03</span></div>
+          <h3 id="moduleQuizQuestion">Loading the module question…</h3>
+          <div class="module-answer-grid" id="moduleAnswerGrid"></div>
+          <div class="module-quiz-feedback" id="moduleQuizFeedback" role="status" aria-live="polite"></div>
+          <button class="module-quiz-next" id="moduleQuizNext" type="button" disabled>Next module question <span aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
       <section class="quiz-section shell" id="quiz" aria-labelledby="quiz-title">
-        <div class="quiz-heading"><p class="eyebrow">02 / quick quiz</p><h2 id="quiz-title">A little proof<br /><em>you were listening.</em></h2><p>Not an exam. Just a handful of “I remember that!” moments, with explanations worth keeping.</p></div>
+        <div class="quiz-heading"><p class="eyebrow">04 / quick quiz</p><h2 id="quiz-title">A little proof<br /><em>you were listening.</em></h2><p>Not an exam. Just a handful of “I remember that!” moments, with explanations worth keeping.</p></div>
         <div class="quiz-card">
           <div class="quiz-meta"><span>question <b id="quizNumber">01</b> / 04</span><span class="quiz-score" id="quizScore">0 correct</span></div>
           <h3 id="quizQuestion">Which tag gives the main navigation its meaning?</h3>

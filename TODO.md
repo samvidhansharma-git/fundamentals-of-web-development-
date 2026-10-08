@@ -10,3 +10,6 @@
 - Make checkpoint revisits, quiz retries, and a full restart available.
 - Make the experience responsive across mobile, tablet, and desktop with touch-friendly controls and quick loading.
 - Implement accessibility-first behavior with semantic structure, keyboard navigation, visible focus states, readable contrast, screen-reader support, and reduced-motion preferences.
+- Add a separate Modules I–IV learning section based on the supplied course-profile DOCX, with detailed explanations of web basics, HTML/CSS foundations, CSS backgrounds and box model, viewport/rulesets/classes/Bootstrap, Flexbox/layout/utilities, images/void elements/margins/attributes/lists/links, and HTML5 multimedia/semantic elements.
+- Add a separate module-wise quiz section with one selectable quiz for each of Modules I–IV, three questions per module, visible score/progress, immediate explanations, retry after incorrect answers, and module switching.
+- Keep the new learning and module quiz sections separate from the original quick quiz and preserve the existing quest, XP, replay, final reveal, responsive, and accessibility behaviors.
