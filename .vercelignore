@@ -1,0 +1,9 @@
+server.mjs
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+app.config.ts
+TODO.md
+plan.md
+.gitignore
