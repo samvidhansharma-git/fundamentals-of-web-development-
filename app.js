@@ -119,11 +119,17 @@ modules[3].questions.push(
 const moduleQuestionTotal = () => modules.reduce((total, module) => total + module.questions.length, 0);
 
 const STORAGE_KEY = 'classquest-save-v1';
-const freshState = () => ({ active: 0, completed: new Set(), xp: 0, quizIndex: 0, quizScore: 0, answered: false, moduleIndex: 0, moduleQuestion: 0, moduleScore: 0, moduleAnswered: false, quizModuleIndex: 0, quizModuleQuestion: 0, quizModuleAnswered: false, certificateName: '', certificateTeacher: '', certificateClass: '', certificateNote: '' });
+const freshState = () => ({ active: 0, completed: new Set(), xp: 0, quizIndex: 0, quizScore: 0, answered: false, moduleIndex: 0, moduleQuestion: 0, moduleScore: 0, moduleAnswered: false, quizModuleIndex: 0, quizModuleQuestion: 0, quizModuleQuestions: [0, 0, 0, 0], quizModuleAnswered: false, quizCompletedQuestions: [], certificateName: '', certificateTeacher: '', certificateClass: '', certificateNote: '' });
 function loadState() {
   try {
     const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
-    return saved ? { ...freshState(), ...saved, completed: new Set(saved.completed || []) } : freshState();
+    if (!saved) return freshState();
+    const merged = { ...freshState(), ...saved, completed: new Set(saved.completed || []) };
+    if (!Array.isArray(merged.quizModuleQuestions)) merged.quizModuleQuestions = [0, 0, 0, 0];
+    const allQuestionKeys = modules.flatMap((module, moduleIndex) => module.questions.map((_, questionIndex) => `${moduleIndex}-${questionIndex}`));
+    if (merged.moduleScore >= moduleQuestionTotal()) { merged.moduleScore = moduleQuestionTotal(); merged.quizCompletedQuestions = allQuestionKeys; }
+    else if (!Array.isArray(merged.quizCompletedQuestions)) merged.quizCompletedQuestions = [];
+    return merged;
   } catch { return freshState(); }
 }
 function persistState() {
@@ -330,6 +336,8 @@ function renderModule(index, resetQuestion = true) {
 function renderModuleQuiz() {
   const module = modules[state.quizModuleIndex];
   const question = module.questions[state.quizModuleQuestion];
+  const questionKey = `${state.quizModuleIndex}-${state.quizModuleQuestion}`;
+  state.quizModuleAnswered = state.quizCompletedQuestions.includes(questionKey);
   $$('.module-quiz-tab').forEach((tab, tabIndex) => { const active = tabIndex === state.quizModuleIndex; tab.classList.toggle('is-active', active); tab.setAttribute('aria-selected', String(active)); });
   $('#moduleQuizLabel').textContent = `${module.number} / ${String(module.questions.length).padStart(2, '0')} QUESTIONS`;
   $('#moduleQuizProgress').textContent = `${String(state.quizModuleQuestion + 1).padStart(2, '0')} / ${String(module.questions.length).padStart(2, '0')}`;
@@ -341,6 +349,12 @@ function renderModuleQuiz() {
   $('#moduleQuizNext').disabled = true;
   $('#moduleQuizNext').innerHTML = state.quizModuleQuestion === module.questions.length - 1 && state.quizModuleIndex === modules.length - 1 ? 'Module quizzes complete <span aria-hidden="true">✦</span>' : 'Next module question <span aria-hidden="true">→</span>';
   $('#moduleAnswerGrid').innerHTML = question.answers.map((answer, answerIndex) => `<button class="module-answer" type="button" data-module-answer="${answerIndex}">${escapeHTML(answer)}</button>`).join('');
+  if (state.quizModuleAnswered) {
+    $$('#moduleAnswerGrid .module-answer').forEach(button => { button.disabled = true; if (Number(button.dataset.moduleAnswer) === question.correct) button.classList.add('correct'); });
+    $('#moduleQuizFeedback').textContent = 'Already completed. Your saved answer is counted in the course score.';
+    $('#moduleQuizFeedback').className = 'module-quiz-feedback good';
+    $('#moduleQuizNext').disabled = false;
+  }
 }
 
 function chooseModuleAnswer(index) {
@@ -349,7 +363,9 @@ function chooseModuleAnswer(index) {
   const buttons = $$('#moduleAnswerGrid .module-answer');
   const feedback = $('#moduleQuizFeedback');
   if (index === question.correct) {
-    state.quizModuleAnswered = true; state.moduleScore += 1;
+    state.quizModuleAnswered = true;
+    const questionKey = `${state.quizModuleIndex}-${state.quizModuleQuestion}`;
+    if (!state.quizCompletedQuestions.includes(questionKey)) { state.quizCompletedQuestions.push(questionKey); state.moduleScore = Math.min(state.moduleScore + 1, moduleQuestionTotal()); }
     buttons.forEach(button => { button.disabled = true; if (Number(button.dataset.moduleAnswer) === question.correct) button.classList.add('correct'); });
     feedback.textContent = question.good; feedback.className = 'module-quiz-feedback good';
     $('#moduleQuizNext').disabled = false; showToast(`Module ${state.quizModuleIndex + 1} recall confirmed`);
@@ -364,14 +380,19 @@ function chooseModuleAnswer(index) {
 function nextModuleQuestion() {
   const module = modules[state.quizModuleIndex];
   if (!state.quizModuleAnswered) return;
-  if (state.quizModuleQuestion < module.questions.length - 1) state.quizModuleQuestion += 1;
-  else if (state.quizModuleIndex < modules.length - 1) { state.quizModuleIndex += 1; state.quizModuleQuestion = 0; }
+  if (state.quizModuleQuestion < module.questions.length - 1) {
+    state.quizModuleQuestion += 1;
+    state.quizModuleQuestions[state.quizModuleIndex] = state.quizModuleQuestion;
+  } else if (state.quizModuleIndex < modules.length - 1) {
+    state.quizModuleIndex += 1;
+    state.quizModuleQuestion = state.quizModuleQuestions[state.quizModuleIndex] || 0;
+  }
   else { showToast('All four module quizzes complete · excellent listening'); scrollToTarget($('#modules')); return; }
   state.moduleAnswered = false; state.quizModuleAnswered = false; persistState(); renderModuleQuiz();
 }
 
 function selectQuizModule(index) {
-  state.quizModuleIndex = index; state.quizModuleQuestion = 0; state.quizModuleAnswered = false; persistState(); renderModuleQuiz();
+  state.quizModuleIndex = index; state.quizModuleQuestion = state.quizModuleQuestions[index] || 0; state.quizModuleAnswered = false; persistState(); renderModuleQuiz();
 }
 
 function resetQuest() {
