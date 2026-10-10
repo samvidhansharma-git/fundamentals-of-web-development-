@@ -119,7 +119,7 @@ modules[3].questions.push(
 const moduleQuestionTotal = () => modules.reduce((total, module) => total + module.questions.length, 0);
 
 const STORAGE_KEY = 'classquest-save-v1';
-const freshState = () => ({ active: 0, completed: new Set(), xp: 0, quizIndex: 0, quizScore: 0, answered: false, moduleIndex: 0, moduleQuestion: 0, moduleScore: 0, moduleAnswered: false });
+const freshState = () => ({ active: 0, completed: new Set(), xp: 0, quizIndex: 0, quizScore: 0, answered: false, moduleIndex: 0, moduleQuestion: 0, moduleScore: 0, moduleAnswered: false, quizModuleIndex: 0, quizModuleQuestion: 0, quizModuleAnswered: false, certificateName: '', certificateTeacher: '', certificateClass: '', certificateNote: '' });
 function loadState() {
   try {
     const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY));
@@ -264,13 +264,49 @@ function updateCertificateState() {
   button.innerHTML = unlocked ? 'Generate my certificate <span aria-hidden="true">✦</span>' : 'Certificate locked <span aria-hidden="true">✦</span>';
   $('#certificateHint').textContent = unlocked ? 'Perfect score. Your certificate is ready to generate.' : `Answer all ${total} module questions correctly to unlock your certificate. ${state.moduleScore} / ${total} complete.`;
   $('#certificateSection').hidden = !unlocked;
-  if (unlocked) $('#certificateDate').textContent = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).toUpperCase();
+  if (unlocked) {
+    $('#certificateDate').textContent = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date()).toUpperCase();
+    ['certificateName', 'certificateTeacher', 'certificateClass', 'certificateNote'].forEach((id) => { if ($(`#${id}`)) $(`#${id}`).value = state[id] || ''; });
+    renderCertificatePreview();
+  }
+}
+
+function certificateDetails() {
+  return {
+    name: state.certificateName.trim() || 'Your name',
+    teacher: state.certificateTeacher.trim() || 'Teacher guided the class',
+    className: state.certificateClass.trim() || 'Class Quest',
+    note: state.certificateNote.trim()
+  };
+}
+
+function renderCertificatePreview() {
+  const details = certificateDetails();
+  $('#certificateRecipient').textContent = details.name;
+  $('#certificateTeacherPrint').textContent = details.teacher;
+  $('#certificateClassPrint').textContent = details.className;
+  $('#certificatePreviewNote').textContent = details.note ? `“${details.note}”` : '';
+}
+
+function saveCertificateDetails(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+  state.certificateName = $('#certificateName').value.trim();
+  state.certificateTeacher = $('#certificateTeacher').value.trim();
+  state.certificateClass = $('#certificateClass').value.trim();
+  state.certificateNote = $('#certificateNote').value.trim();
+  persistState(); renderCertificatePreview();
+  $('#certificateFormStatus').textContent = 'Saved — these details will appear on the printed certificate.';
+  showToast('Certificate details saved · ready to print');
 }
 
 function certificateDocument() {
   const date = $('#certificateDate').textContent;
   const total = moduleQuestionTotal();
-  return `<!doctype html><html><head><meta charset="utf-8"><title>Class Quest Certificate</title><style>body{margin:0;background:#fff9ed;color:#10152b;font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.certificate{width:min(900px,calc(100% - 48px));padding:12px;background:#10152b}.border{border:2px solid #d9ff38;background:linear-gradient(135deg,#fffdf8,#fff0da 58%,#e2f9ff);padding:72px 64px;text-align:center}.overline{font-size:12px;letter-spacing:3px;color:#8b9e37}.spark{font-size:34px;color:#ff5f6d;margin:26px}.label{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#ff5f6d}h1{font:600 58px Georgia,serif;line-height:1;margin:24px 0}h1 em{color:#ff5f6d;font-style:normal}.body{max-width:620px;margin:0 auto 42px;color:#596476;font-size:17px;line-height:1.6}.meta{display:flex;justify-content:space-around;border-top:1px solid #d7cdbb;padding-top:22px;font-size:12px}.meta b,.meta small{display:block}.meta small{margin-top:6px;color:#68718a;text-transform:uppercase;letter-spacing:1px}</style></head><body><main class="certificate"><section class="border"><p class="overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="spark">✦</div><p class="label">certificate of attentive learning</p><h1>This certifies that<br><em>you were listening.</em></h1><p class="body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><div class="meta"><span><b>${date}</b><small>issued today</small></span><span><b>${total} / ${total}</b><small>module quiz score</small></span><span><b>CLASS/QUEST</b><small>learning trail</small></span></div></section></main></body></html>`;
+  const details = certificateDetails();
+  const safe = (value) => escapeHTML(value);
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Class Quest Certificate</title><style>body{margin:0;background:#fff9ed;color:#10152b;font-family:Arial,sans-serif;display:grid;place-items:center;min-height:100vh}.certificate{width:min(900px,calc(100% - 48px));padding:12px;background:#10152b}.border{border:2px solid #d9ff38;background:linear-gradient(135deg,#fffdf8,#fff0da 58%,#e2f9ff);padding:72px 64px;text-align:center}.overline{font-size:12px;letter-spacing:3px;color:#8b9e37}.spark{font-size:34px;color:#ff5f6d;margin:26px}.label{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:#ff5f6d}.recipient{font:600 46px Georgia,serif;line-height:1.1;margin:22px 0 8px;color:#10152b}.subline{color:#68718a;font-size:15px}.body{max-width:620px;margin:30px auto 16px;color:#596476;font-size:17px;line-height:1.6}.note{font-style:italic;color:#ff5f6d;min-height:24px}.meta{display:flex;justify-content:space-around;gap:18px;border-top:1px solid #d7cdbb;padding-top:22px;font-size:12px}.meta b,.meta small{display:block}.meta small{margin-top:6px;color:#68718a;text-transform:uppercase;letter-spacing:1px}</style></head><body><main class="certificate"><section class="border"><p class="overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="spark">✦</div><p class="label">certificate of attentive learning</p><p class="recipient">${safe(details.name)}</p><p class="subline">was present for every detail, every question, and every lesson.</p><p class="body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><p class="note">${details.note ? `“${safe(details.note)}”` : ''}</p><div class="meta"><span><b>${date}</b><small>issued today</small></span><span><b>${total} / ${total}</b><small>module quiz score</small></span><span><b>${safe(details.teacher)}</b><small>with gratitude to</small></span><span><b>${safe(details.className)}</b><small>class / institution</small></span></div></section></main></body></html>`;
 }
 
 function downloadCertificate() {
@@ -288,35 +324,35 @@ function renderModule(index, resetQuestion = true) {
     tab.classList.toggle('is-active', active);
     tab.setAttribute('aria-selected', String(active));
   });
-  $('#moduleLearning').innerHTML = `<div class="module-card-head"><div><span class="module-number">${module.number}</span><h3>${module.title}</h3><p class="module-subtitle">${module.subtitle}</p></div><span class="module-pill">course profile / ${index + 1} of 4</span></div><p class="module-summary">${module.summary}</p><div class="module-detail-grid">${module.concepts.map(([term, detail]) => `<div class="module-detail"><h4>${escapeHTML(term)}</h4><p>${escapeHTML(detail)}</p></div>`).join('')}</div><div class="module-example"><div><span class="module-label">remember this pattern</span><p>${module.lab}</p></div><pre><code>${escapeHTML(module.code)}</code></pre></div>`;
-  renderModuleQuiz();
+  $('#moduleLearning').innerHTML = `<div class="module-card-head"><div><span class="module-number">${module.number}</span><h3>${module.title}</h3><p class="module-subtitle">${module.subtitle}</p></div><span class="module-pill">study shelf / ${index + 1} of 4</span></div><p class="module-summary">${module.summary}</p><div class="module-topic-heading"><span class="module-label">module syllabus / ${module.concepts.length} separate topics</span><p>Read each topic card as its own lesson. The assessment below is intentionally separate.</p></div><div class="module-topic-list">${module.concepts.map(([term, detail], topicIndex) => `<article class="module-topic-card"><div class="module-topic-index">${String(topicIndex + 1).padStart(2, '0')}</div><div><h4>${escapeHTML(term)}</h4><p>${escapeHTML(detail)}</p><span class="topic-status">topic ${String(topicIndex + 1).padStart(2, '0')} / remembered in the notes</span></div></article>`).join('')}</div><div class="module-example"><div><span class="module-label">remember this pattern</span><p>${module.lab}</p></div><pre><code>${escapeHTML(module.code)}</code></pre></div>`;
 }
 
 function renderModuleQuiz() {
-  const module = modules[state.moduleIndex];
-  const question = module.questions[state.moduleQuestion];
+  const module = modules[state.quizModuleIndex];
+  const question = module.questions[state.quizModuleQuestion];
+  $$('.module-quiz-tab').forEach((tab, tabIndex) => { const active = tabIndex === state.quizModuleIndex; tab.classList.toggle('is-active', active); tab.setAttribute('aria-selected', String(active)); });
   $('#moduleQuizLabel').textContent = `${module.number} / ${String(module.questions.length).padStart(2, '0')} QUESTIONS`;
-  $('#moduleQuizProgress').textContent = `${String(state.moduleQuestion + 1).padStart(2, '0')} / ${String(module.questions.length).padStart(2, '0')}`;
+  $('#moduleQuizProgress').textContent = `${String(state.quizModuleQuestion + 1).padStart(2, '0')} / ${String(module.questions.length).padStart(2, '0')}`;
   $('#moduleQuizQuestion').textContent = question.q;
   $('#moduleQuizScore').textContent = `${state.moduleScore} / ${moduleQuestionTotal()}`;
   updateCertificateState();
   $('#moduleQuizFeedback').textContent = '';
   $('#moduleQuizFeedback').className = 'module-quiz-feedback';
   $('#moduleQuizNext').disabled = true;
-  $('#moduleQuizNext').innerHTML = state.moduleQuestion === module.questions.length - 1 && state.moduleIndex === modules.length - 1 ? 'Module quizzes complete <span aria-hidden="true">✦</span>' : 'Next module question <span aria-hidden="true">→</span>';
+  $('#moduleQuizNext').innerHTML = state.quizModuleQuestion === module.questions.length - 1 && state.quizModuleIndex === modules.length - 1 ? 'Module quizzes complete <span aria-hidden="true">✦</span>' : 'Next module question <span aria-hidden="true">→</span>';
   $('#moduleAnswerGrid').innerHTML = question.answers.map((answer, answerIndex) => `<button class="module-answer" type="button" data-module-answer="${answerIndex}">${escapeHTML(answer)}</button>`).join('');
 }
 
 function chooseModuleAnswer(index) {
-  if (state.moduleAnswered) return;
-  const question = modules[state.moduleIndex].questions[state.moduleQuestion];
+  if (state.quizModuleAnswered) return;
+  const question = modules[state.quizModuleIndex].questions[state.quizModuleQuestion];
   const buttons = $$('#moduleAnswerGrid .module-answer');
   const feedback = $('#moduleQuizFeedback');
   if (index === question.correct) {
-    state.moduleAnswered = true; state.moduleScore += 1;
+    state.quizModuleAnswered = true; state.moduleScore += 1;
     buttons.forEach(button => { button.disabled = true; if (Number(button.dataset.moduleAnswer) === question.correct) button.classList.add('correct'); });
     feedback.textContent = question.good; feedback.className = 'module-quiz-feedback good';
-    $('#moduleQuizNext').disabled = false; showToast(`Module ${state.moduleIndex + 1} recall confirmed`);
+    $('#moduleQuizNext').disabled = false; showToast(`Module ${state.quizModuleIndex + 1} recall confirmed`);
     if (state.moduleScore === moduleQuestionTotal()) { showToast('Perfect module score · certificate unlocked'); window.setTimeout(() => scrollToTarget($('#certificateSection')), 240); }
   } else {
     buttons[index].classList.add('wrong'); buttons[index].disabled = true;
@@ -326,12 +362,16 @@ function chooseModuleAnswer(index) {
 }
 
 function nextModuleQuestion() {
-  const module = modules[state.moduleIndex];
-  if (!state.moduleAnswered) return;
-  if (state.moduleQuestion < module.questions.length - 1) state.moduleQuestion += 1;
-  else if (state.moduleIndex < modules.length - 1) { state.moduleIndex += 1; state.moduleQuestion = 0; }
+  const module = modules[state.quizModuleIndex];
+  if (!state.quizModuleAnswered) return;
+  if (state.quizModuleQuestion < module.questions.length - 1) state.quizModuleQuestion += 1;
+  else if (state.quizModuleIndex < modules.length - 1) { state.quizModuleIndex += 1; state.quizModuleQuestion = 0; }
   else { showToast('All four module quizzes complete · excellent listening'); scrollToTarget($('#modules')); return; }
-  state.moduleAnswered = false; persistState(); renderModule(state.moduleIndex, false);
+  state.moduleAnswered = false; state.quizModuleAnswered = false; persistState(); renderModuleQuiz();
+}
+
+function selectQuizModule(index) {
+  state.quizModuleIndex = index; state.quizModuleQuestion = 0; state.quizModuleAnswered = false; persistState(); renderModuleQuiz();
 }
 
 function resetQuest() {
@@ -354,12 +394,15 @@ $('#quizNext').addEventListener('click', () => { if (state.quizIndex < quizzes.l
 document.addEventListener('click', (event) => {
   const tab = event.target.closest('.module-tab');
   if (tab) { renderModule(Number(tab.dataset.module)); scrollToTarget($('#moduleLearning')); return; }
+  const quizTab = event.target.closest('.module-quiz-tab');
+  if (quizTab) { selectQuizModule(Number(quizTab.dataset.quizModule)); return; }
   const answer = event.target.closest('.module-answer');
   if (answer) chooseModuleAnswer(Number(answer.dataset.moduleAnswer));
 });
 $('#moduleQuizNext').addEventListener('click', nextModuleQuestion);
 $('#certificateButton').addEventListener('click', () => { updateCertificateState(); scrollToTarget($('#certificateSection')); showToast('Your certificate is ready'); });
+$('#certificateDetailsForm').addEventListener('submit', saveCertificateDetails);
 $('#downloadCertificate').addEventListener('click', downloadCertificate);
 $('#printCertificate').addEventListener('click', () => window.print());
 
-renderLesson(state.active); renderQuiz(); renderModule(state.moduleIndex); updateHud();
+renderLesson(state.active); renderQuiz(); renderModule(state.moduleIndex); renderModuleQuiz(); updateHud();

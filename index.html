@@ -113,7 +113,7 @@
       </section>
 
       <section class="modules-section shell" id="modules" aria-labelledby="modules-title">
-        <div class="modules-heading"><div><p class="eyebrow">02 / study trail</p><h2 id="modules-title">Learn the modules<br /><em>in full colour.</em></h2></div><p>Built from the official Fundamentals of Web Development course profile. Pick a module to open its detailed learning notes, then prove the details in the separate quiz zone.</p></div>
+        <div class="modules-heading"><div><p class="eyebrow">02 / study trail</p><h2 id="modules-title">Learn the modules<br /><em>topic by topic.</em></h2></div><p>Built from the official Fundamentals of Web Development course profile. Each module is a study shelf: every syllabus topic gets its own clear card before you move to the separate assessment zone.</p></div>
         <div class="module-tabs" role="tablist" aria-label="Modules 1 to 4">
           <button class="module-tab is-active" type="button" role="tab" aria-selected="true" data-module="0"><span>01</span> Web + HTML</button>
           <button class="module-tab" type="button" role="tab" aria-selected="false" data-module="1"><span>02</span> CSS styling</button>
@@ -124,8 +124,14 @@
       </section>
 
       <section class="module-quiz-section shell" id="module-quiz" aria-labelledby="module-quiz-title">
-        <div class="module-quiz-intro"><p class="eyebrow">03 / module quizzes</p><h2 id="module-quiz-title">Prove the<br /><em>details stuck.</em></h2><p>Four module-wise quiz paths. Eight questions per module. Wrong answers stay kind, and every correct answer explains the why.</p><div class="module-quiz-score"><span>course quiz score</span><strong id="moduleQuizScore">0 / 32</strong></div><div class="certificate-gate"><span class="module-label">final reward</span><p id="certificateHint">Answer all 32 module questions correctly to unlock your certificate.</p><button class="certificate-button" id="certificateButton" type="button" disabled>Certificate locked <span aria-hidden="true">✦</span></button></div></div>
+        <div class="module-quiz-intro"><p class="eyebrow">03 / module quizzes</p><h2 id="module-quiz-title">Prove the<br /><em>details stuck.</em></h2><p>This is a separate assessment room. Choose one module at a time, answer all eight questions, read the explanation, and return later without losing your place.</p><div class="module-quiz-score"><span>course quiz score</span><strong id="moduleQuizScore">0 / 32</strong></div><div class="certificate-gate"><span class="module-label">final reward</span><p id="certificateHint">Answer all 32 module questions correctly to unlock your certificate.</p><button class="certificate-button" id="certificateButton" type="button" disabled>Certificate locked <span aria-hidden="true">✦</span></button></div></div>
         <div class="module-quiz-card">
+          <div class="module-quiz-tabs" role="tablist" aria-label="Separate module quizzes">
+            <button class="module-quiz-tab is-active" type="button" role="tab" aria-selected="true" data-quiz-module="0"><span>01</span> Web + HTML</button>
+            <button class="module-quiz-tab" type="button" role="tab" aria-selected="false" data-quiz-module="1"><span>02</span> CSS styling</button>
+            <button class="module-quiz-tab" type="button" role="tab" aria-selected="false" data-quiz-module="2"><span>03</span> Flexbox + Bootstrap</button>
+            <button class="module-quiz-tab" type="button" role="tab" aria-selected="false" data-quiz-module="3"><span>04</span> Multimedia</button>
+          </div>
           <div class="module-quiz-top"><span id="moduleQuizLabel">MODULE 01 / 08 QUESTIONS</span><span id="moduleQuizProgress">01 / 08</span></div>
           <h3 id="moduleQuizQuestion">Loading the module question…</h3>
           <div class="module-answer-grid" id="moduleAnswerGrid"></div>
@@ -135,7 +141,18 @@
       </section>
 
       <section class="certificate-section shell" id="certificateSection" aria-labelledby="certificate-title" hidden>
-        <div class="certificate-preview" id="certificatePreview"><div class="certificate-border"><p class="certificate-overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="certificate-spark" aria-hidden="true">✦</div><p class="certificate-label">certificate of attentive learning</p><h2 id="certificate-title">This certifies that<br /><em>you were listening.</em></h2><p class="certificate-body">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><div class="certificate-meta"><span><b id="certificateDate">08 OCT 2026</b><small>issued today</small></span><span><b>32 / 32</b><small>module quiz score</small></span><span><b>CLASS/QUEST</b><small>learning trail</small></span></div></div></div>
+        <div class="certificate-details-panel">
+          <div><p class="eyebrow">04 / certificate details</p><h2>Put your name<br /><em>on the learning.</em></h2><p>Enter the details exactly as you want them printed. Your certificate stays in this browser session and can be updated before printing or downloading.</p></div>
+          <form class="certificate-details-form" id="certificateDetailsForm">
+            <label><span>Full name <b aria-hidden="true">*</b></span><input id="certificateName" name="certificateName" type="text" autocomplete="name" placeholder="Your full name" required maxlength="80" /></label>
+            <label><span>Teacher’s name</span><input id="certificateTeacher" name="certificateTeacher" type="text" autocomplete="off" placeholder="Teacher who guided the class" maxlength="80" /></label>
+            <label><span>Class / institution</span><input id="certificateClass" name="certificateClass" type="text" autocomplete="organization" placeholder="Class, school, or institution" maxlength="100" /></label>
+            <label class="certificate-note-field"><span>Personal note</span><textarea id="certificateNote" name="certificateNote" rows="3" maxlength="180" placeholder="A short line to remember this journey"></textarea></label>
+            <button class="primary-button" type="submit">Update my certificate <span aria-hidden="true">✦</span></button>
+            <p class="certificate-form-status" id="certificateFormStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+        <div class="certificate-preview" id="certificatePreview"><div class="certificate-border"><p class="certificate-overline">CLASS QUEST / FUNDAMENTALS OF WEB DEVELOPMENT</p><div class="certificate-spark" aria-hidden="true">✦</div><p class="certificate-label">certificate of attentive learning</p><h2 id="certificate-title">This certifies that</h2><p class="certificate-recipient" id="certificateRecipient">Your name</p><p class="certificate-subline">was present for every detail, every question, and every lesson.</p><p class="certificate-body" id="certificateBody">For successfully completing all four module quizzes and demonstrating confident recall of HTML, CSS, Flexbox, Bootstrap, and HTML5 multimedia foundations.</p><p class="certificate-note" id="certificatePreviewNote"></p><div class="certificate-meta"><span><b id="certificateDate">08 OCT 2026</b><small>issued today</small></span><span><b>32 / 32</b><small>module quiz score</small></span><span><b id="certificateTeacherPrint">Teacher guided the class</b><small>with gratitude to</small></span><span><b id="certificateClassPrint">Class Quest</b><small>class / institution</small></span></div></div></div>
         <div class="certificate-actions"><button class="primary-button" id="downloadCertificate" type="button">Download certificate <span aria-hidden="true">↓</span></button><button class="ghost-button" id="printCertificate" type="button">Print certificate</button></div>
       </section>
 
